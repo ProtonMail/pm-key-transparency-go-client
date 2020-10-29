@@ -1,0 +1,17 @@
+image: golang
+
+stages:
+  - lint
+  - test
+
+lint:
+  image: $CI_REGISTRY/infra/kubernetes/images/golang:latest
+  stage: lint
+  script:
+    - make install-linters
+    - make lint
+
+test:
+  stage: test
+  script:
+    - make test

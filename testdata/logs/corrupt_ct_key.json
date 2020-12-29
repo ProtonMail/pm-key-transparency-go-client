@@ -1,0 +1,52 @@
+{
+  "operators": [
+    {
+      "name": "Fake Google Log",
+      "email": [
+        "x@x.x"
+      ],
+      "logs": [
+        {
+          "description": "Other public key",
+          "log_id": "fT7y+I//iFVoJMLAyp5SiXkrxQ54CX8uapdomX4i8Nc=",
+          "key": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEpBFS2xdBTpDUVlESMFL4mwPPTJ/4Lji18Vq6+ji50o8agdqVzDPsIShmxlY+YDYhINnUrF36XBmhBX3+ICP89Q==",
+          "url": "https://ct.googleapis.com/logs/xenon2021/",
+          "mmd": 86400,
+          "state": {
+            "usable": {
+              "timestamp": "2019-06-17T21:23:01Z"
+            }
+          },
+          "temporal_interval": {
+            "start_inclusive": "2021-01-01T00:00:00Z",
+            "end_exclusive": "2022-01-01T00:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Let's Encrypt",
+      "email": [
+        "sre@letsencrypt.org"
+      ],
+      "logs": [
+        {
+          "description": "Let's Encrypt 'Oak2021' log",
+          "log_id": "lCC8Ho7VjWyIcx+CiyIsDdHaTV5sT5Q9YdtOL1hNosI=",
+          "key": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAELsYzGMNwo8rBIlaklBIdmD2Ofn6HkfrjK0Ukz1uOIUC6Lm0jTITCXhoIdjs7JkyXnwuwYiJYiH7sE1YeKu8k9w==",
+          "url": "https://oak.ct.letsencrypt.org/2021/",
+          "mmd": 86400,
+          "state": {
+            "usable": {
+              "timestamp": "2020-01-27T18:18:26Z"
+            }
+          },
+          "temporal_interval": {
+            "start_inclusive": "2021-01-01T00:00:00Z",
+            "end_exclusive": "2022-01-07T00:00:00Z"
+          }
+        }
+      ]
+    }
+  ]
+}

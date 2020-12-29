@@ -1,0 +1,52 @@
+{
+  "operators": [
+    {
+      "name": "Fake Google Log",
+      "email": [
+        "x@x.x"
+      ],
+      "logs": [
+        {
+          "description": "Bad log_id",
+          "log_id": "IAmAFakeIDIJustStoleTheKeyFromAnotherCTLog==",
+          "key": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAER+1MInu8Q39BwDZ5Rp9TwXhwm3ktvgJzpk/r7dDgGk7ZacMm3ljfcoIvP1E72T8jvyLT1bvdapylajZcTH6W5g==",
+          "url": "https://testing.is.good",
+          "mmd": 86400,
+          "state": {
+            "usable": {
+              "timestamp": "2019-06-17T21:23:01Z"
+            }
+          },
+          "temporal_interval": {
+            "start_inclusive": "2021-01-01T00:00:00Z",
+            "end_exclusive": "2022-01-01T00:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Let's Encrypt",
+      "email": [
+        "sre@letsencrypt.org"
+      ],
+      "logs": [
+        {
+          "description": "Let's Encrypt 'Oak2021' log",
+          "log_id": "lCC8Ho7VjWyIcx+CiyIsDdHaTV5sT5Q9YdtOL1hNosI=",
+          "key": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAELsYzGMNwo8rBIlaklBIdmD2Ofn6HkfrjK0Ukz1uOIUC6Lm0jTITCXhoIdjs7JkyXnwuwYiJYiH7sE1YeKu8k9w==",
+          "url": "https://oak.ct.letsencrypt.org/2021/",
+          "mmd": 86400,
+          "state": {
+            "usable": {
+              "timestamp": "2020-01-27T18:18:26Z"
+            }
+          },
+          "temporal_interval": {
+            "start_inclusive": "2021-01-01T00:00:00Z",
+            "end_exclusive": "2022-01-07T00:00:00Z"
+          }
+        }
+      ]
+    }
+  ]
+}

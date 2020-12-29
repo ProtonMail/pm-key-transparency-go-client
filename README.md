@@ -8,15 +8,13 @@ A Go package that verifies ProtonMail's Key Transparency proofs.
 A key transparency proof is encoded in a `ktclient.Data` object consisting of
 the following compulsory fields:
 ```
-// Data contains necessary fields to perform a full KT verification.
 type Data struct {
 	// API-specific data
 	Email         []byte // This package does not perform email validation
 	SignedKeyList []byte
 	Revision      int
 
-	// Verifiable Random Functions - see
-	// https://tools.ietf.org/html/draft-irtf-cfrg-vrf-08
+	// Verifiable Random Functions
 	VRFProof []byte
 
 	// Merkle tree insertion
@@ -25,7 +23,7 @@ type Data struct {
 	PreviousChainHash []byte
 	ChainHash         []byte
 
-	// TLS certificates separated by '\n'
+	// TLS certificates, separated by '\n'
 	Certificates []byte // X509 certificates chain
 }
 ```
@@ -47,16 +45,16 @@ if err := good.Verify(); err != nil {
 
 The package `api` provides functions to populate a `ktclient.Data` object using
 a KT API, for full proof verification. An example is provided in
-[helpers/api/api_test.go](#).
+[helpers/api/api_test.go](https://github.com/ProtonMail/pm-key-transparency-go-client/blob/master/helpers/api/api_test.go).
 
 ## Dependencies
 
 - VRF verification https://github.com/r2ishiguro/vrf/ (implements [the VRF spec](https://tools.ietf.org/html/draft-irtf-cfrg-vrf-08))
-- Various X509- and SCT-related functionalities: github.com/google/certificate-transparency-go v1.1.1
-- Cryptography golang.org/x/crypto
-- Code linters github.com/golangci/golangci-lint v1.32.0
+- Various X509- and SCT-related functionalities: [certificate-transparency-go](https://github.com/google/certificate-transparency-go) v1.1.1
+- Cryptography [x/crypto](https://golang.org/x/crypto)
+- Code linters [golangci-lint](https://github.com/golangci/golangci-lint) v1.32.0
 
-Refer to [go.mod](#) for an up-to-date list.
+Refer to [go.mod](https://github.com/ProtonMail/pm-key-transparency-go-client/blob/master/go.mod) for an up-to-date list.
 
 ## Contribute
 

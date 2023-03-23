@@ -1,4 +1,4 @@
-module kt
+module github.com/ProtonMail/pm-key-transparency-go-client
 
 go 1.19
 

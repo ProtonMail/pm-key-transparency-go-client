@@ -193,7 +193,7 @@ func verifySCT(cert, leCert *x509.Certificate) error {
 		}
 		publicKey, err := ct.PublicKeyFromB64(key.PublicKey)
 		if err != nil {
-			err := fmt.Errorf("ktclient: %w: cannot parse public key: %v", errSCT, err)
+			err := fmt.Errorf("ktclient: %w: cannot parse public key: %w", errSCT, err)
 			sctErrors = append(sctErrors, err)
 
 			continue
@@ -211,7 +211,7 @@ func verifySCT(cert, leCert *x509.Certificate) error {
 	if len(operators) < 2 {
 		combinedErr := errSCT
 		for _, sctErr := range sctErrors {
-			combinedErr = fmt.Errorf("%w; %v", combinedErr, sctErr)
+			combinedErr = fmt.Errorf("%w; %w", combinedErr, sctErr)
 		}
 
 		return fmt.Errorf("ktclient: Certificate was not logged by two distinct operators; %w", combinedErr)
@@ -235,7 +235,7 @@ func parseCTPublicKeys(logsJSON string) (map[string]ctPublicKey, error) {
 				LogID string `json:"log_id"` //nolint:tagliatelle
 				Key   string `json:"Key"`    //nolint:tagliatelle
 			}
-		}
+		} `json:"operators"`
 	}
 	err := json.Unmarshal(jsonRaw, &operators)
 	if err != nil {

@@ -6,48 +6,71 @@ A Go package that verifies ProtonMail's Key Transparency proofs.
 
 ## Usage
 
-#### Against local data
-A key transparency proof is encoded in a `ktclient.Data` object consisting of
+### Verify a proof
+A key transparency proof is encoded in a `ktclient.InsertionProof` object consisting of
 compulsory fields:
-```
-type ktclient.Data struct {
-	Email             []byte
-	SignedKeyList     []byte
-	Revision          int
-	VRFProof          []byte
-	Neighbours        map[uint8][]byte // In hashing order
-	RootHash          []byte
-	PreviousChainHash []byte
-	ChainHash         []byte
-	Certificates      []byte
+```go
+type InsertionProof struct {
+	ProofType   int // absence, obsolescence or existence
+	Revision    int // revision of the skl
+	VRFProofHex string // vrf proof
+	Neighbours  map[uint8][]byte // merkle tree proof
 }
 ```
 The corresponding proof can be verified as
 follows
 
-```
-import "gitlab.protontech.ch/crypto/ktclient"
+```go
+import ktclient "github.com/ProtonMail/pm-key-transparency-go-client"
 
-var good = &ktclient.Input {
-    <Populate all fields>
-}
-if err := good.Verify(); err != nil {
+err := ktclient.VerifyInsertionProof(
+	email, // address email
+	signedKeyList, // address signed key list to verify
+	vrfPublicKeyBase64, // vrf public key
+	rootHashHex, // epoch root hash
+	proof, // proof that the SKL is in the merkle tree
+)
+if err != nil {
     // Verification failed!
 }
 ```
 
-#### Against ProtonMail's Key Transparency API
+### Verify an epoch
 
-The package `api` provides functions to populate a `ktclient.Data` object using
-a KT API, for full proof verification. An example is provided in
-[helpers/api/api_test.go](#).
+A key transparency epoch is encoded in a `ktclient.Epoch` object consisting of
+compulsory fields:
+```go
+type Epoch struct {
+	EpochID           int
+	PreviousChainHash string
+	CertificateChain  string
+	CertificateIssuer int
+	TreeHash          string
+	ChainHash         string
+	CertificateTime   int64
+}
+```
+The corresponding proof can be verified as
+follows
+
+```go
+import ktclient "github.com/ProtonMail/pm-key-transparency-go-client"
+
+notBefore, err := ktclient.VerifyEpoch(
+	epoch,
+	baseDomain,
+	currentUnixTime,
+)
+if err != nil {
+    // Verification failed!
+}
+```
 
 ## Dependencies
 
-- VRF verification https://github.com/r2ishiguro/vrf/ (implements [the VRF spec](https://tools.ietf.org/html/draft-irtf-cfrg-vrf-02))
-- Various X509- and SCT-related functionalities: github.com/google/certificate-transparency-go v1.1.1
-- Cryptography golang.org/x/crypto
-- Code linters github.com/golangci/golangci-lint v1.32.0
+- VRF verification `github.com/ProtonMail/go-ecvrf` (implements [the VRF spec](https://tools.ietf.org/html/draft-irtf-cfrg-vrf-02))
+- Various X509- and SCT-related functionalities: `github.com/google/certificate-transparency-go` v1.1.1
+- Code linters `github.com/golangci/golangci-lint` v1.32.0
 
 Refer to [go.mod](#) for an up-to-date list.
 

@@ -11,6 +11,7 @@ linters:
     - nestif
     - wsl
     - testpackage
+    - depguard
   fast: false
 
 issues:

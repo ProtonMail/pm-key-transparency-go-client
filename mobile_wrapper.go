@@ -40,7 +40,6 @@ func decodeHex(s string) ([]byte, error) {
 // It uses a Neighbours object to bypass gomobile limitations.
 func NewInsertionProof(
 	proofTypeValue int,
-	revisionValue int,
 	vrfProofHexValue string,
 	neighboursWrapper *Neighbours,
 ) *InsertionProof {
@@ -51,7 +50,6 @@ func NewInsertionProof(
 
 	return &InsertionProof{
 		ProofType:   proofTypeValue,
-		Revision:    revisionValue,
 		VRFProofHex: vrfProofHexValue,
 		Neighbours:  neighboursMap,
 	}

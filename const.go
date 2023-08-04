@@ -16,7 +16,7 @@ const (
 	obsolescenceProofType = 2
 )
 
-const nameVersion = 0
+const nameVersion = 1
 
 //go:embed internal/lets_encrypt.crt
 var letsEncryptCertificate string

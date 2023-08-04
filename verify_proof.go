@@ -14,7 +14,6 @@ import (
 // proof in the merkle tree.
 type InsertionProof struct {
 	ProofType   int
-	Revision    int
 	VRFProofHex string
 	Neighbours  map[uint8][]byte
 }
@@ -24,22 +23,29 @@ type InsertionProof struct {
 // associated with the VRF output for the given email.
 func VerifyInsertionProof(
 	email string,
+	revision int,
 	signedKeyList string,
+	minEpochID int,
 	vrfPublicKeyBase64 string,
 	rootHashHex string,
 	proof *InsertionProof,
 ) error {
-	key, err := verifyVRFOutput(email, proof.VRFProofHex, vrfPublicKeyBase64)
+	vrfHash, err := verifyVRFOutput(email, proof.VRFProofHex, vrfPublicKeyBase64)
 	if err != nil {
 		return errors.Wrap(err, "ktclient: VRF proof")
 	}
+	treePath := append(
+		vrfHash[0:28],
+		byte(revision>>24), byte(revision>>16),
+		byte(revision>>8), byte(revision),
+	)
 	hashFunc := sha256.New()
 	emptyNode := make([]byte, hashFunc.Size())
-	leafHash, err := computeLeafNode(proof, emptyNode, hashFunc, signedKeyList)
+	leafHash, err := computeLeafNode(proof, emptyNode, hashFunc, minEpochID, signedKeyList)
 	if err != nil {
 		return err
 	}
-	computedRootHash, err := computeRootHash(key, proof, emptyNode, leafHash, hashFunc)
+	computedRootHash, err := computeRootHash(treePath, proof, emptyNode, leafHash, hashFunc)
 	if err != nil {
 		return err
 	}
@@ -56,7 +62,7 @@ func VerifyInsertionProof(
 }
 
 func computeRootHash(
-	key []byte,
+	treePath []byte,
 	proof *InsertionProof,
 	emptyNode []byte,
 	leafNode []byte,
@@ -66,7 +72,7 @@ func computeRootHash(
 	var concat []byte
 	reachedNonEmptyTree := false
 	for treeLevel := 255; treeLevel >= 0; treeLevel-- {
-		bit := (key[treeLevel/8] >> (8 - (treeLevel % 8) - 1)) & 0x01
+		bit := (treePath[treeLevel/8] >> (8 - (treeLevel % 8) - 1)) & 0x01
 		neighbour, ok := proof.Neighbours[uint8(treeLevel)]
 		if !ok {
 			if !reachedNonEmptyTree && proof.ProofType == absenceProofType {
@@ -96,6 +102,7 @@ func computeLeafNode(
 	proof *InsertionProof,
 	emptyNode []byte,
 	hashFunc hash.Hash,
+	minEpochID int,
 	signedKeyList string,
 ) ([]byte, error) {
 	var currentHash []byte
@@ -103,16 +110,16 @@ func computeLeafNode(
 	case absenceProofType:
 		currentHash = emptyNode
 	case presenceProofType, obsolescenceProofType:
-		rev := []byte{
-			byte(proof.Revision >> 24), byte(proof.Revision >> 16),
-			byte(proof.Revision >> 8), byte(proof.Revision),
+		minEpochIDBytes := []byte{
+			byte(minEpochID >> 24), byte(minEpochID >> 16),
+			byte(minEpochID >> 8), byte(minEpochID),
 		}
 		hashFunc.Reset()
 		_, err := hashFunc.Write([]byte(signedKeyList))
 		if err != nil {
 			return nil, errors.Wrap(err, "ktclient: error while hashing")
 		}
-		leaf := append(hashFunc.Sum(nil), rev...)
+		leaf := append(hashFunc.Sum(nil), minEpochIDBytes...)
 		hashFunc.Reset()
 		_, err = hashFunc.Write(leaf)
 		if err != nil {

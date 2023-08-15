@@ -3,7 +3,7 @@ package ktclient
 import _ "embed" // needed for embedded files
 
 // Version the version of the library.
-const Version = "0.0.1"
+const Version = "1.0.0"
 
 const (
 	letsEncryptIssuer = 0

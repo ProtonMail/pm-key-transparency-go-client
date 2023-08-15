@@ -12,7 +12,6 @@ compulsory fields:
 ```go
 type InsertionProof struct {
 	ProofType   int // absence, obsolescence or existence
-	Revision    int // revision of the skl
 	VRFProofHex string // vrf proof
 	Neighbours  map[uint8][]byte // merkle tree proof
 }
@@ -24,8 +23,10 @@ follows
 import ktclient "github.com/ProtonMail/pm-key-transparency-go-client"
 
 err := ktclient.VerifyInsertionProof(
-	email, // address email
+	email, // address email,
+	revision, // the revision number of the key list
 	signedKeyList, // address signed key list to verify
+	minEpochID, // the ID of the first epoch that has the SKL
 	vrfPublicKeyBase64, // vrf public key
 	rootHashHex, // epoch root hash
 	proof, // proof that the SKL is in the merkle tree
